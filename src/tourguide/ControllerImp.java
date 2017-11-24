@@ -33,6 +33,7 @@ public class ControllerImp implements Controller {
     public ControllerImp(double waypointRadius, double waypointSeparation) {
         this.waypointRadius = waypointRadius;
         this.waypointSeparation = waypointSeparation;
+        this.mode = Mode.BROWSE;
     }
 
     //--------------------------

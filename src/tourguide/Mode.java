@@ -1,5 +1,5 @@
 package tourguide;
 
 public enum Mode {
-    BROWSE, CREATE, FOLLOW
+    BROWSE, CREATE, FOLLOW;
 }
