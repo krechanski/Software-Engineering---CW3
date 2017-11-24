@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package tourguide;
 
@@ -15,22 +15,33 @@ public class ControllerImp implements Controller {
     private static final String LS = System.lineSeparator();
 
     private String startBanner(String messageName) {
-        return  LS 
+        return  LS
                 + "-------------------------------------------------------------" + LS
                 + "MESSAGE: " + messageName + LS
                 + "-------------------------------------------------------------";
     }
-    
+
+    //--------------------------
+    // Global Controller Variables
+    //--------------------------
+
+    public Mode mode;   // A Mode instance that will keep track of the state the app is in
+    public double waypointRadius;
+    public double waypointSeparation;
+
+
     public ControllerImp(double waypointRadius, double waypointSeparation) {
+        this.waypointRadius = waypointRadius;
+        this.waypointSeparation = waypointSeparation;
     }
 
     //--------------------------
     // Create tour mode
     //--------------------------
 
-    // Some examples are shown below of use of logger calls.  The rest of the methods below that correspond 
+    // Some examples are shown below of use of logger calls.  The rest of the methods below that correspond
     // to input messages could do with similar calls.
-    
+
     @Override
     public Status startNewTour(String id, String title, Annotation annotation) {
         logger.fine(startBanner("startNewTour"));
@@ -63,7 +74,7 @@ public class ControllerImp implements Controller {
     public Status showTourDetails(String tourID) {
         return new Status.Error("unimplemented");
     }
-  
+
     @Override
     public Status showToursOverview() {
         return new Status.Error("unimplemented");
@@ -72,7 +83,7 @@ public class ControllerImp implements Controller {
     //--------------------------
     // Follow tour mode
     //--------------------------
-    
+
     @Override
     public Status followTour(String id) {
         return new Status.Error("unimplemented");
