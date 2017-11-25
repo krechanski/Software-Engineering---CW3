@@ -11,7 +11,5 @@ public class Waypoint {
         this.location = location;
     }
 
-//    public boolean near(Location) {
-//    }
 
 }

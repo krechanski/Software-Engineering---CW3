@@ -20,13 +20,18 @@ public abstract class Status {
     public static final Status OK = new OK();
     
     public static class OK extends Status {
-        private OK() {}
+        private OK() {
+
+        }
         
         public boolean equals(Object o) {
+
             return o instanceof OK;
         }
         
-        public String toString() { return "Status.OK"; }
+        public String toString() {
+            return "Status.OK";
+        }
     }
     
     public static class Error extends Status {
@@ -45,7 +50,9 @@ public abstract class Status {
             }
         }
         
-        public String toString() {return "Status.Error(" + message + ")"; }
+        public String toString() {
+            return "Status.Error(" + message + ")";
+        }
     }
 
 }
