@@ -21,4 +21,7 @@ public class Tour {
         this.legs = new ArrayList<Leg>();
     }
 
+    public Tour(String tourID) {
+
+    }
 }

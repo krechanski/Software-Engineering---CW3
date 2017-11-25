@@ -12,7 +12,4 @@ public class Leg {
     public Leg (Annotation annotation) {
         this.annotation = annotation;
     }
-
-
-
 }

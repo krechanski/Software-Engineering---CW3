@@ -35,7 +35,7 @@ public class ControllerImp implements Controller {
     public ControllerImp(double waypointRadius, double waypointSeparation) {
         this.waypointRadius = waypointRadius;
         this.waypointSeparation = waypointSeparation;
-        this.mode = Mode.BROWSE;
+        this.mode = Mode.BROWSE_DETAILS;
         this.library = new Library();
     }
 
@@ -53,7 +53,6 @@ public class ControllerImp implements Controller {
         Tour newTour = new Tour(id, title, annotation);
         logger.finer("addTheNewTour");
         library.addTour(newTour);
-
         return Status.OK;
     }
 
@@ -81,12 +80,22 @@ public class ControllerImp implements Controller {
 
     @Override
     public Status showTourDetails(String tourID) {
-        return new Status.Error("unimplemented");
+        this.mode = Mode.BROWSE_DETAILS;
+        logger.fine("tourDetails");
+        Tour tourDetails = new Tour(tourID);
+        return Status.OK;
     }
 
     @Override
     public Status showToursOverview() {
-        return new Status.Error("unimplemented");
+
+//       if (this.mode != Mode.BROWSE_DETAILS) {
+//           logger.info("showToursOverview");
+//
+//
+//       }
+
+        return null;
     }
 
     //--------------------------

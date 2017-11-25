@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package tourguide;
 
@@ -9,37 +9,37 @@ import java.util.List;
 
 /**
  * @author pbj
- * 
+ *
  */
 public class Chunk {
     private static final String LS = System.lineSeparator();
     public static boolean within(double x, double y, double tol) {
         return Math.abs(x - y) <= tol;
     }
-    
-    // Chunk printing is rounding to nearest metre / nearest degree, so useful to 
+
+    // Chunk printing is rounding to nearest metre / nearest degree, so useful to
     // have a generous tolerance that enables us to infer plausible expected values from
     // error messages when comparing chunks.
-    
+
     private static final double EPS = 1.0;
-    
+
     /*
      * Chunk subclasses for BROWSE mode
-     * 
+     *
      */
     public static class OverviewLine {
         public String id;
         public String title;
-        
+
         public OverviewLine(String id, String title) {
             this.id = id;
-            this.title = title;   
+            this.title = title;
         }
-        
+
         public String toString() {
             return id + ": " + title + LS;
         }
-        
+
         public boolean equals(Object o) {
             if (!(o instanceof OverviewLine)) return false;
             OverviewLine oOL = (OverviewLine) o;
@@ -47,7 +47,7 @@ public class Chunk {
         }
 
     }
-    
+
     public static class BrowseOverview extends Chunk {
 
         public List<OverviewLine> overviewLines;
@@ -55,11 +55,11 @@ public class Chunk {
         public BrowseOverview() {
             overviewLines = new ArrayList<OverviewLine>();
         }
-  
+
         public void addIdAndTitle(String id, String title) {
             overviewLines.add(new OverviewLine(id,title));
         }
- 
+
         public String toString() {
             if (overviewLines.isEmpty()) {
                 return "NO TOURS TO SHOW" + LS;
@@ -70,7 +70,7 @@ public class Chunk {
             }
             return sb.toString();
         }
-        
+
         public boolean equals(Object o ) {
             if (!(o instanceof BrowseOverview)) return false;
             BrowseOverview oBO = (BrowseOverview) o;
@@ -87,7 +87,7 @@ public class Chunk {
         public String id;
         public String title;
         public Annotation details;
-        
+
         public BrowseDetails(String id, String title, Annotation details) {
             this.id = id;
             this.title = title;
@@ -102,7 +102,7 @@ public class Chunk {
             return id.equals(oBD.id) &&
                     title.equals(oBD.title) &&
                     details.equals(oBD.details);
-                            
+
         }
     }
     /*
@@ -110,13 +110,13 @@ public class Chunk {
      */
     public static class FollowHeader extends Chunk {
         public String title;
-        public int currentStage; 
+        public int currentStage;
         public int numberWaypoints;
-        
+
         public FollowHeader(String title, int currentStage, int numberWaypoints) {
             this.title = title;
             this.currentStage = currentStage;
-	    this.numberWaypoints = numberWaypoints;
+	          this.numberWaypoints = numberWaypoints;
         }
         public String toString() {
             return String.format("%1$s  %2$d/%3$d%n",title, currentStage, numberWaypoints);
@@ -132,7 +132,7 @@ public class Chunk {
     }
     public static class FollowWaypoint extends Chunk {
         public Annotation annotation;
-        
+
         public FollowWaypoint(Annotation annotation) {
             this.annotation = annotation;
         }
@@ -142,33 +142,33 @@ public class Chunk {
         public boolean equals(Object o) {
             if (!(o instanceof FollowWaypoint)) return false;
             FollowWaypoint oFW = (FollowWaypoint) o;
-            return annotation.equals(oFW.annotation); 
+            return annotation.equals(oFW.annotation);
         }
-        
+
 
     }
- 
+
     public static class FollowLeg extends Chunk {
         public Annotation annotation;
-        
+
         public FollowLeg(Annotation annotation) {
             this.annotation = annotation;
         }
         public String toString() {
-            return String.format("Leg to next waypoint:%n%1$s", 
+            return String.format("Leg to next waypoint:%n%1$s",
                     annotation);
         }
         public boolean equals(Object o) {
             if (!(o instanceof FollowLeg)) return false;
             FollowLeg oFL = (FollowLeg) o;
-            return annotation.equals(oFL.annotation); 
+            return annotation.equals(oFL.annotation);
         }
     }
 
     public static class FollowBearing extends Chunk {
         public double bearing;
         public double distance;
-        
+
         public FollowBearing(double bearing, double distance) {
             this.bearing = bearing;
             this.distance = distance;
@@ -179,7 +179,7 @@ public class Chunk {
         public boolean equals(Object o) {
             if (!(o instanceof FollowBearing)) return false;
             FollowBearing oFB = (FollowBearing) o;
-            return within(bearing, oFB.bearing, EPS) && 
+            return within(bearing, oFB.bearing, EPS) &&
                     within(distance, oFB.distance, EPS) ;
         }
     }
@@ -190,20 +190,20 @@ public class Chunk {
         public String title;
         public int numberLegs;
         public int numberWaypoints;
-        
+
         public CreateHeader(String title, int numberLegs, int numberWaypoints) {
             this.title = title;
             this.numberLegs = numberLegs;
             this.numberWaypoints = numberWaypoints;
         }
         public String toString() {
-            return String.format("New tour: %1$s. #legs: %2$d  #waypoints: %3$d%n", 
+            return String.format("New tour: %1$s. #legs: %2$d  #waypoints: %3$d%n",
                     title, numberLegs, numberWaypoints);
         }
         public boolean equals(Object o) {
             if (!(o instanceof CreateHeader)) return false;
             CreateHeader oCH = (CreateHeader) o;
-            return title.equals(oCH.title) 
+            return title.equals(oCH.title)
                     && numberLegs == oCH.numberLegs
                     && numberWaypoints == oCH.numberWaypoints;
         }
