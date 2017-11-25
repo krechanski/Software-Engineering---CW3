@@ -215,13 +215,15 @@ public class ControllerImp implements Controller {
     @Override
     public Status showTourDetails(String tourID) {
         logger.fine("tourDetails");
-        if (this.mode == Mode.BROWSE_DETAILS) {
-            Tour tourDetails = new Tour(tourID);
-            return Status.OK;
-        }
+        if (this.mode == Mode.BROWSE_OVERVIEW) {
+            this.mode = Mode.BROWSE_DETAILS;
 
-        else {
-            return new Status.Error("Invalid. The app is not in BROWSE_DETAILS mode");
+            Tour tourDetails = new Tour(tourID);
+            
+            return Status.OK;
+        } else {
+            logger.warning(errorBanner("NOT_IN_BROWSE_OVERVIEW_MODE"));
+            return new Status.Error("Invalid operation. The app is not in BROWSE_OVERVIEW Mode.");
         }
 
 
