@@ -56,9 +56,9 @@ public class AllTests {
             case "test":
                 result = JUnitCore.runClasses(TestTest.class);
                 break;
-//            case "create":
-//                result = JUnitCore.runClasses(CreateTest.class);
-//                break;
+            case "create":
+                result = JUnitCore.runClasses(CreateTest.class);
+                break;
             default:
                 result = JUnitCore.runClasses(AllTests.class);
         }

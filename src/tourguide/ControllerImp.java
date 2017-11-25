@@ -15,24 +15,24 @@ public class ControllerImp implements Controller {
     private static final String LS = System.lineSeparator();
 
     private String startBanner(String messageName) {
-        return  LS
+        return LS
                 + "-------------------------------------------------------------" + LS
                 + "MESSAGE: " + messageName + LS
                 + "-------------------------------------------------------------";
     }
 
     private String errorBanner(String messageName) {
-        return  LS
+        return LS
                 + "ERROR: " + " !!!!! " + messageName + " !!!!! ";
     }
 
     private String finerBanner(String messageName) {
-        return  LS
+        return LS
                 + "STATUS: " + " ------- " + messageName + " ------- ";
     }
 
     private String finestBanner(String messageName) {
-        return  LS
+        return LS
                 + "STATUS: " + " ******* " + messageName + " ******* ";
     }
 
@@ -77,9 +77,9 @@ public class ControllerImp implements Controller {
             this.tour = new Tour(id, title, annotation);
             this.output.clear();
             this.output.add(new Chunk.CreateHeader(
-                this.tour.title,
-                this.tour.legs.size(),
-                this.tour.waypoints.size()
+                    this.tour.title,
+                    this.tour.legs.size(),
+                    this.tour.waypoints.size()
             ));
 
             logger.finer(finerBanner("newTourStarted"));
@@ -114,17 +114,17 @@ public class ControllerImp implements Controller {
             if (totalWaypoints == 0) {
                 this.tour.waypoints.add(waypoint);
                 this.output.add(new Chunk.CreateHeader(
-                    this.tour.title,
-                    this.tour.legs.size(),
-                    this.tour.waypoints.size()
+                        this.tour.title,
+                        this.tour.legs.size(),
+                        this.tour.waypoints.size()
                 ));
                 logger.finer(finerBanner("initialWaypointAdded"));
                 return Status.OK;
             } else {
-                Waypoint prevWaypoint = this.tour.waypoints.get(totalWaypoints-1);
+                Waypoint prevWaypoint = this.tour.waypoints.get(totalWaypoints - 1);
                 Displacement waypointDisplacement = new Displacement(
-                    (currentLocation.easting - prevWaypoint.location.easting),
-                    (currentLocation.northing - prevWaypoint.location.northing)
+                        (currentLocation.easting - prevWaypoint.location.easting),
+                        (currentLocation.northing - prevWaypoint.location.northing)
                 );
                 if (waypointDisplacement.distance() < this.waypointSeparation) {
                     logger.warning(errorBanner("WAYPOINT_TOO_CLOSE_TO_PREV"));
@@ -135,9 +135,9 @@ public class ControllerImp implements Controller {
             }
 
             this.output.add(new Chunk.CreateHeader(
-                this.tour.title,
-                this.tour.legs.size(),
-                this.tour.waypoints.size()
+                    this.tour.title,
+                    this.tour.legs.size(),
+                    this.tour.waypoints.size()
             ));
 
             logger.finer(finerBanner("waypointAdded"));
@@ -170,9 +170,9 @@ public class ControllerImp implements Controller {
             }
 
             this.output.add(new Chunk.CreateHeader(
-                this.tour.title,
-                this.tour.legs.size(),
-                this.tour.waypoints.size()
+                    this.tour.title,
+                    this.tour.legs.size(),
+                    this.tour.waypoints.size()
             ));
 
             logger.finer(finerBanner("legAdded"));
@@ -215,29 +215,27 @@ public class ControllerImp implements Controller {
     @Override
     public Status showTourDetails(String tourID) {
         logger.fine("tourDetails");
-        if (this.mode == Mode.BROWSE_DETAILS) {
-            Tour tourDetails = new Tour(tourID);
-            return Status.OK;
-        }
+        if (this.mode == Mode.BROWSE_OVERVIEW) {
+            this.mode = Mode.BROWSE_DETAILS;
 
-        else {
+            for (Tour id : this.library.tours) {
+                if (tourID.equalsIgnoreCase(this.tour.id)) {
+                    logger.finer(finerBanner(tourID));
+                    logger.finer(finerBanner(this.tour.title));
+                    logger.finer(finerBanner);
+                }
+            }
+
+            return Status.OK;
+        } else {
             return new Status.Error("Invalid. The app is not in BROWSE_DETAILS mode");
         }
-
-
-
     }
 
     @Override
     public Status showToursOverview() {
-
-//       if (this.mode != Mode.BROWSE_DETAILS) {
-//           logger.info("showToursOverview");
-//
-//
-//       }
-
         return null;
+
     }
 
     //--------------------------
@@ -246,6 +244,7 @@ public class ControllerImp implements Controller {
 
     @Override
     public Status followTour(String id) {
+
         return new Status.Error("unimplemented");
     }
 
@@ -259,7 +258,7 @@ public class ControllerImp implements Controller {
     //--------------------------
     @Override
     public void setLocation(double easting, double northing) {
-        this.currentLocation = new Location (easting, northing);
+        this.currentLocation = new Location(easting, northing);
     }
 
     @Override
