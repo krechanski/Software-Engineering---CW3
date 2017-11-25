@@ -248,10 +248,6 @@ public class ControllerImp implements Controller {
 
     @Override
     public Status followTour(String id) {
-<<<<<<< HEAD
-
-        return new Status.Error("unimplemented");
-=======
         logger.fine(startBanner("followTour"));
         this.output.clear();
 
@@ -298,7 +294,6 @@ public class ControllerImp implements Controller {
         logger.finer(finerBanner("followingTour"));
         return Status.OK;
 
->>>>>>> f8f36ddf2b7477fa8d4ff3661b3cbfdec9955877
     }
 
     @Override
@@ -311,9 +306,9 @@ public class ControllerImp implements Controller {
     //--------------------------
     @Override
     public void setLocation(double easting, double northing) {
-<<<<<<< HEAD
+
         this.currentLocation = new Location(easting, northing);
-=======
+
         this.currentLocation = new Location (easting, northing);
         logger.finer(finerBanner("positionUpdated"));
 
@@ -323,7 +318,7 @@ public class ControllerImp implements Controller {
                 logger.warning(errorBanner("SOMETHING_WENT_WRONG"));
             }
         }
->>>>>>> f8f36ddf2b7477fa8d4ff3661b3cbfdec9955877
+
     }
 
     @Override
