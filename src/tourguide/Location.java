@@ -1,4 +1,5 @@
-import tourguide.Displacement;
+
+package tourguide;
 
 import java.util.logging.Logger;
 

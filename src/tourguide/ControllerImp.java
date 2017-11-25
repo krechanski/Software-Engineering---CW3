@@ -29,11 +29,14 @@ public class ControllerImp implements Controller {
     public double waypointRadius;
     public double waypointSeparation;
 
+    public Library library;
+
 
     public ControllerImp(double waypointRadius, double waypointSeparation) {
         this.waypointRadius = waypointRadius;
         this.waypointSeparation = waypointSeparation;
         this.mode = Mode.BROWSE;
+        this.library = new Library();
     }
 
     //--------------------------
@@ -46,7 +49,12 @@ public class ControllerImp implements Controller {
     @Override
     public Status startNewTour(String id, String title, Annotation annotation) {
         logger.fine(startBanner("startNewTour"));
-        return new Status.Error("unimplemented");
+
+        Tour newTour = new Tour(id, title, annotation);
+        logger.finer("addTheNewTour");
+        library.addTour(newTour);
+
+        return Status.OK;
     }
 
     @Override

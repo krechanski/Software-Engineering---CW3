@@ -81,27 +81,25 @@ public class TestTest {
 
     private void addTour() {
 
-
-
         checkStatus( controller.startNewTour(
                 "T1",
                 "Informatics at UoE",
                 ann("The Informatics Forum and Appleton Tower\n"))
                 );
-
-        checkOutput(1, 0, new Chunk.CreateHeader("Informatics at UoE", 0,  0));
-
-        controller.setLocation(300, -500);
-
-        checkStatus( controller.addLeg(ann("Start at NE corner of George Square\n")) );
-
-        checkOutput(1, 0, new Chunk.CreateHeader("Informatics at UoE", 1,  0));
-
-        checkStatus( controller.addWaypoint(ann("Informatics Forum")) );
-
-        checkOutput(1, 0, new Chunk.CreateHeader("Informatics at UoE", 1,  1));
-
-        checkStatus( controller.endNewTour() );
+        //
+        // checkOutput(1, 0, new Chunk.CreateHeader("Informatics at UoE", 0,  0));
+        //
+        // controller.setLocation(300, -500);
+        //
+        // checkStatus( controller.addLeg(ann("Start at NE corner of George Square\n")) );
+        //
+        // checkOutput(1, 0, new Chunk.CreateHeader("Informatics at UoE", 1,  0));
+        //
+        // checkStatus( controller.addWaypoint(ann("Informatics Forum")) );
+        //
+        // checkOutput(1, 0, new Chunk.CreateHeader("Informatics at UoE", 1,  1));
+        //
+        // checkStatus( controller.endNewTour() );
 
     }
 
