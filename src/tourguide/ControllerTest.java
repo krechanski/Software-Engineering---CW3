@@ -164,6 +164,8 @@ public class ControllerTest {
         addOnePointTour();
         addTwoPointTour();
     }
+
+
     
     @Test
     public void browsingTwoTours() {
