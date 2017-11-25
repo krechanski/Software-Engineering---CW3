@@ -18,7 +18,7 @@ import org.junit.runners.Suite.SuiteClasses;
  *
  */
 @RunWith(Suite.class)
-@SuiteClasses({ DisplacementTest.class, ControllerTest.class, TestTest.class, CreateTest.class })
+@SuiteClasses({ DisplacementTest.class, ControllerTest.class, TestTest.class})
 public class AllTests {
 
     public static void main(String[] args) {
@@ -56,9 +56,9 @@ public class AllTests {
             case "test":
                 result = JUnitCore.runClasses(TestTest.class);
                 break;
-            case "create":
-                result = JUnitCore.runClasses(CreateTest.class);
-                break;
+//            case "create":
+//                result = JUnitCore.runClasses(CreateTest.class);
+//                break;
             default:
                 result = JUnitCore.runClasses(AllTests.class);
         }

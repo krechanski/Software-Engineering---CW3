@@ -14,7 +14,8 @@ public class Displacement {
         east = e;
         north = n;
     }
-    
+
+
     public double distance() {
         logger.finer("Entering");
         

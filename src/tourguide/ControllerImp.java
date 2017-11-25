@@ -52,7 +52,7 @@ public class ControllerImp implements Controller {
         logger.fine(startBanner("startNewTour"));
 
         // Set the mode
-        if (this.mode == Mode.BROWSE) {
+        if (this.mode == Mode.BROWSE_DETAILS) {
             this.mode = Mode.CREATE;
 
             // Initialize a tour object
@@ -137,10 +137,18 @@ public class ControllerImp implements Controller {
 
     @Override
     public Status showTourDetails(String tourID) {
-        this.mode = Mode.BROWSE_DETAILS;
         logger.fine("tourDetails");
-        Tour tourDetails = new Tour(tourID);
-        return Status.OK;
+        if (this.mode == Mode.BROWSE_DETAILS) {
+            Tour tourDetails = new Tour(tourID);
+            return Status.OK;
+        }
+
+        else {
+            return new Status.Error("Invalid. The app is not in BROWSE_DETAILS mode");
+        }
+
+
+
     }
 
     @Override
