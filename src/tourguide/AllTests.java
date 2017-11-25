@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package tourguide;
 
@@ -18,14 +18,15 @@ import org.junit.runners.Suite.SuiteClasses;
  *
  */
 @RunWith(Suite.class)
-@SuiteClasses({ DisplacementTest.class, ControllerTest.class })
+@SuiteClasses({ DisplacementTest.class, ControllerTest.class, TestTest.class, CreateTest.class })
 public class AllTests {
 
     public static void main(String[] args) {
-        if (args.length >= 2){
+        String test = "all";
+        if (args.length > 2){
             System.err.println("Unrecognised arguments");
             return;
-        }  else if (args.length == 1) {
+        } else if (args.length == 1 || args.length == 2) {
             String loggingLevel = args[0];
             if (loggingLevel.equals("off")) {
                 ControllerTest.loggingLevel = Level.OFF;
@@ -39,13 +40,29 @@ public class AllTests {
                 System.err.println("Unrecognised logging level argument: " + loggingLevel);
                 return;
             }
-         } 
-        runJUnitTests();
+        }
+        if (args.length == 2) {
+            test = args[1];
+        }
+        runJUnitTests(test);
     }
 
-    public static void runJUnitTests() {
+    public static void runJUnitTests(String test) {
+        Result result;
+        switch (test) {
+            case "all":
+                result = JUnitCore.runClasses(AllTests.class);
+                break;
+            case "test":
+                result = JUnitCore.runClasses(TestTest.class);
+                break;
+            case "create":
+                result = JUnitCore.runClasses(CreateTest.class);
+                break;
+            default:
+                result = JUnitCore.runClasses(AllTests.class);
+        }
 
-        Result result = JUnitCore.runClasses(AllTests.class);
         System.out.println("TEST RESULTS");
         System.out.println("Number of tests run: " + result.getRunCount());
         if (result.wasSuccessful()) {
@@ -55,8 +72,8 @@ public class AllTests {
             System.out.println("Number of failed tests: " + result.getFailureCount());
             for (Failure failure : result.getFailures()) {
                 System.out.println(failure.toString());
-            }  
-        } 
+            }
+        }
     }
 
 

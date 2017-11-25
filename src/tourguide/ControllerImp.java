@@ -28,9 +28,10 @@ public class ControllerImp implements Controller {
     public Mode mode;   // A Mode instance that will keep track of the state the app is in
     public double waypointRadius;
     public double waypointSeparation;
-
+    public Location currentLocation;
     public Library library;
 
+    private Tour tour;
 
     public ControllerImp(double waypointRadius, double waypointSeparation) {
         this.waypointRadius = waypointRadius;
@@ -50,23 +51,78 @@ public class ControllerImp implements Controller {
     public Status startNewTour(String id, String title, Annotation annotation) {
         logger.fine(startBanner("startNewTour"));
 
-        Tour newTour = new Tour(id, title, annotation);
-        logger.finer("addTheNewTour");
-        library.addTour(newTour);
+        // Set the mode
+        if (this.mode == Mode.BROWSE) {
+            this.mode = Mode.CREATE;
 
-        return Status.OK;
+            // Initialize a tour object
+            this.tour = new Tour(id, title, annotation);
+            logger.finer("addTheNewTour");
+
+            return Status.OK;
+        } else {
+            return new Status.Error("The app must be in BROWSE Mode in order to start creating a tour.");
+        }
     }
 
     @Override
     public Status addWaypoint(Annotation annotation) {
         logger.fine(startBanner("addWaypoint"));
-        return new Status.Error("unimplemented");
+
+        if (this.mode != Mode.CREATE) {
+            Waypoint waypoint = new Waypoint(annotation, currentLocation);
+            int totalWaypoints = this.tour.waypoints.size();
+
+            if (this.tour.legs.size() == totalWaypoints) {
+                Status addLegStatus = addLeg(null);
+                if (addLegStatus != Status.OK) {
+                    return addLegStatus;
+                }
+            }
+
+            if (totalWaypoints == 0) {
+                this.tour.waypoints.add(waypoint);
+
+                return Status.OK;
+            } else {
+                Waypoint prevWaypoint = this.tour.waypoints.get(totalWaypoints-1);
+                Displacement waypointDisplacement = new Displacement(
+                    (currentLocation.easting - prevWaypoint.location.easting),
+                    (currentLocation.northing - prevWaypoint.location.northing)
+                );
+                if (waypointDisplacement.distance() < this.waypointSeparation) {
+                    return new Status.Error("The distance between two waypoints should be: " + this.waypointSeparation);
+                } else {
+                    this.tour.waypoints.add(waypoint);
+                }
+            }
+
+            return Status.OK;
+        } else {
+            return new Status.Error("Invalid operation. The app is not in CREATE Mode.");
+        }
     }
 
     @Override
     public Status addLeg(Annotation annotation) {
         logger.fine(startBanner("addLeg"));
-        return new Status.Error("unimplemented");
+
+        if (this.mode != Mode.CREATE) {
+            if (annotation == null) {
+                annotation = Annotation.DEFAULT;
+            }
+            Leg leg = new Leg(annotation);
+
+            if (this.tour.legs.size() == this.tour.waypoints.size()) {
+                this.tour.legs.add(leg);
+            } else {
+                return new Status.Error("Cannot add a leg right after another leg.");
+            }
+
+            return Status.OK;
+        } else {
+            return new Status.Error("Invalid operation. The app is not in CREATE Mode.");
+        }
     }
 
     @Override
@@ -108,6 +164,7 @@ public class ControllerImp implements Controller {
     //--------------------------
     @Override
     public void setLocation(double easting, double northing) {
+        this.currentLocation = new Location (easting, northing);
     }
 
     @Override
