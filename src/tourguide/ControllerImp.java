@@ -222,7 +222,6 @@ public class ControllerImp implements Controller {
                 if (tourID.equalsIgnoreCase(this.tour.id)) {
                     logger.finer(finerBanner(tourID));
                     logger.finer(finerBanner(this.tour.title));
-                    logger.finer(finerBanner);
                 }
             }
 
