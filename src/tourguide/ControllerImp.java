@@ -252,6 +252,7 @@ public class ControllerImp implements Controller {
         this.output.clear();
 
         if (this.mode == Mode.BROWSE_DETAILS || this.mode == Mode.BROWSE_OVERVIEW) {
+            this.mode = Mode.FOLLOW;
             this.stage = 0;
 
             for (int i=0; i < this.library.tours.size(); i++) {
@@ -275,8 +276,8 @@ public class ControllerImp implements Controller {
             ));
 
             Displacement disp = new Displacement(
-                (currentLocation.easting - this.tour.waypoints.get(0).location.easting),
-                (currentLocation.northing - this.tour.waypoints.get(0).location.northing)
+                (this.tour.waypoints.get(0).location.easting - currentLocation.easting),
+                (this.tour.waypoints.get(0).location.northing - currentLocation.northing)
             );
             this.output.add(new Chunk.FollowBearing(
                 disp.bearing(),
@@ -285,7 +286,30 @@ public class ControllerImp implements Controller {
 
             logger.finer(finerBanner("followTourInitiated"));
         } else if (this.mode == Mode.FOLLOW) {
-
+            this.output.add(new Chunk.FollowHeader(
+                this.tour.title,
+                this.stage,
+                this.tour.waypoints.size()
+            ));
+            if (this.stage != 0) {
+                this.output.add(new Chunk.FollowWaypoint(
+                    this.tour.waypoints.get(this.stage-1).annotation
+                ));
+            }
+            if (this.stage != this.tour.waypoints.size()) {
+                this.output.add(new Chunk.FollowLeg(
+                    this.tour.legs.get(this.stage).annotation
+                ));
+                Displacement disp = new Displacement(
+                    (this.tour.waypoints.get(this.stage).location.easting - currentLocation.easting),
+                    (this.tour.waypoints.get(this.stage).location.northing - currentLocation.northing)
+                );
+                this.output.add(new Chunk.FollowBearing(
+                    disp.bearing(),
+                    disp.distance()
+                ));
+            }
+                this.stage++;
         } else {
             logger.warning(errorBanner("NOT_IN_BROWSE_MODE"));
             return new Status.Error("Invalid operation. The app is not in BROWSE Mode.");
@@ -306,9 +330,6 @@ public class ControllerImp implements Controller {
     //--------------------------
     @Override
     public void setLocation(double easting, double northing) {
-
-        this.currentLocation = new Location(easting, northing);
-
         this.currentLocation = new Location (easting, northing);
         logger.finer(finerBanner("positionUpdated"));
 

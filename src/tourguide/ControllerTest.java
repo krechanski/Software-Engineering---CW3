@@ -151,42 +151,6 @@ public class ControllerTest {
     }
 
 
-    @Test
-    public void browseOneTour() {
-        logger.info(makeBanner("browseOneTour"));
-        checkStatus(controller.showTourDetails("Edinburgh"));
-        addOnePointTour();
-        Chunk.BrowseOverview overview = new Chunk.BrowseOverview();
-        overview.addIdAndTitle("T1", "Royal Mile");
-    }
-
-
-//    @Test
-//    public void noTours() {
-//        logger.info(makeBanner("noTours"));
-//        checkOutput(1, 0, new Chunk.BrowseOverview() );
-//    }
-//
-//    @Test
-//    public void listTours() {
-//        logger.info(makeBanner("listTours"));
-//    }
-
-    // @Test
-    // public void testAddTwoPointTour() {
-    //     logger.info(makeBanner("testAddTwoPointTour"));
-    //
-    //     addTwoPointTour();
-    // }
-
-    // @Test
-    // public void testAddOfTwoTours() {
-    //     logger.info(makeBanner("testAddOfTwoTour"));
-    //
-    //     addOnePointTour();
-    //     addTwoPointTour();
-    // }
-
 
 
     // @Test
