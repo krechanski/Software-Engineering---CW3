@@ -50,15 +50,18 @@ public class AllTests {
     public static void runJUnitTests(String test) {
         Result result;
         switch (test) {
-            case "all":
-                result = JUnitCore.runClasses(AllTests.class);
-                break;
             case "test":
                 result = JUnitCore.runClasses(TestTest.class);
                 break;
-            case "create":
-                result = JUnitCore.runClasses(CreateTest.class);
-                break;
+           case "create":
+               result = JUnitCore.runClasses(CreateTest.class);
+               break;
+           case "displacement":
+               result = JUnitCore.runClasses(DisplacementTest.class);
+               break;
+           case "controller":
+               result = JUnitCore.runClasses(ControllerTest.class);
+               break;
             default:
                 result = JUnitCore.runClasses(AllTests.class);
         }

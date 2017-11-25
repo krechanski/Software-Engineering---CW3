@@ -48,6 +48,8 @@ public class ControllerImp implements Controller {
 
     private Tour tour;
 
+    private int stage;
+
     private ArrayList<Chunk> output;
 
     public ControllerImp(double waypointRadius, double waypointSeparation) {
@@ -190,9 +192,12 @@ public class ControllerImp implements Controller {
         if (this.mode == Mode.CREATE) {
             if (this.tour.waypoints.size() > 0) {
                 if (this.tour.legs.size() == this.tour.waypoints.size()) {
+                    this.library.addTour(this.tour);
+                    logger.finer(finerBanner("newTourAdded"));
+
                     this.tour = null;
                     this.mode = Mode.BROWSE_OVERVIEW;
-                    logger.finer(finerBanner("tourFinished"));
+                    logger.finer(finerBanner("newTourFinished"));
                     return Status.OK;
                 } else {
                     logger.warning(errorBanner("NO_FINAL_WAYPOINT"));
@@ -243,8 +248,57 @@ public class ControllerImp implements Controller {
 
     @Override
     public Status followTour(String id) {
+<<<<<<< HEAD
 
         return new Status.Error("unimplemented");
+=======
+        logger.fine(startBanner("followTour"));
+        this.output.clear();
+
+        if (this.mode == Mode.BROWSE_DETAILS || this.mode == Mode.BROWSE_OVERVIEW) {
+            this.stage = 0;
+
+            for (int i=0; i < this.library.tours.size(); i++) {
+                if (this.library.tours.get(i).id == id) {
+                    this.tour = this.library.tours.get(i);
+                }
+            }
+
+            if (this.tour == null) {
+                logger.warning(errorBanner("TOUR_NOT_FOUND" + this.library.tours.size()));
+                return new Status.Error("A Tour with id: '" + id + "' has not been found.");
+            }
+
+            this.output.add(new Chunk.FollowHeader(
+                this.tour.title,
+                this.stage,
+                this.tour.waypoints.size()
+            ));
+            this.output.add(new Chunk.FollowLeg(
+                this.tour.legs.get(0).annotation
+            ));
+
+            Displacement disp = new Displacement(
+                (currentLocation.easting - this.tour.waypoints.get(0).location.easting),
+                (currentLocation.northing - this.tour.waypoints.get(0).location.northing)
+            );
+            this.output.add(new Chunk.FollowBearing(
+                disp.bearing(),
+                disp.distance()
+            ));
+
+            logger.finer(finerBanner("followTourInitiated"));
+        } else if (this.mode == Mode.FOLLOW) {
+
+        } else {
+            logger.warning(errorBanner("NOT_IN_BROWSE_MODE"));
+            return new Status.Error("Invalid operation. The app is not in BROWSE Mode.");
+        }
+
+        logger.finer(finerBanner("followingTour"));
+        return Status.OK;
+
+>>>>>>> f8f36ddf2b7477fa8d4ff3661b3cbfdec9955877
     }
 
     @Override
@@ -257,7 +311,19 @@ public class ControllerImp implements Controller {
     //--------------------------
     @Override
     public void setLocation(double easting, double northing) {
+<<<<<<< HEAD
         this.currentLocation = new Location(easting, northing);
+=======
+        this.currentLocation = new Location (easting, northing);
+        logger.finer(finerBanner("positionUpdated"));
+
+        if (this.mode == Mode.FOLLOW) {
+            Status followStatus = followTour(this.tour.id);
+            if (followStatus != Status.OK) {
+                logger.warning(errorBanner("SOMETHING_WENT_WRONG"));
+            }
+        }
+>>>>>>> f8f36ddf2b7477fa8d4ff3661b3cbfdec9955877
     }
 
     @Override
