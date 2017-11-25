@@ -21,6 +21,21 @@ public class ControllerImp implements Controller {
                 + "-------------------------------------------------------------";
     }
 
+    private String errorBanner(String messageName) {
+        return  LS
+                + "ERROR: " + " !!!!! " + messageName + " !!!!! ";
+    }
+
+    private String finerBanner(String messageName) {
+        return  LS
+                + "STATUS: " + " ------- " + messageName + " ------- ";
+    }
+
+    private String finestBanner(String messageName) {
+        return  LS
+                + "STATUS: " + " ******* " + messageName + " ******* ";
+    }
+
     //--------------------------
     // Global Controller Variables
     //--------------------------
@@ -33,11 +48,14 @@ public class ControllerImp implements Controller {
 
     private Tour tour;
 
+    private ArrayList<Chunk> output;
+
     public ControllerImp(double waypointRadius, double waypointSeparation) {
         this.waypointRadius = waypointRadius;
         this.waypointSeparation = waypointSeparation;
-        this.mode = Mode.BROWSE_DETAILS;
+        this.mode = Mode.BROWSE_OVERVIEW;
         this.library = new Library();
+        this.output = new ArrayList<Chunk>();
     }
 
     //--------------------------
@@ -52,15 +70,23 @@ public class ControllerImp implements Controller {
         logger.fine(startBanner("startNewTour"));
 
         // Set the mode
-        if (this.mode == Mode.BROWSE) {
+        if (this.mode == Mode.BROWSE_OVERVIEW) {
             this.mode = Mode.CREATE;
 
             // Initialize a tour object
             this.tour = new Tour(id, title, annotation);
-            logger.finer("addTheNewTour");
+            this.output.clear();
+            this.output.add(new Chunk.CreateHeader(
+                this.tour.title,
+                this.tour.legs.size(),
+                this.tour.waypoints.size()
+            ));
+
+            logger.finer(finerBanner("newTourStarted"));
 
             return Status.OK;
         } else {
+            logger.warning(errorBanner("NOT_IN_BROWSE_MODE"));
             return new Status.Error("The app must be in BROWSE Mode in order to start creating a tour.");
         }
     }
@@ -69,20 +95,30 @@ public class ControllerImp implements Controller {
     public Status addWaypoint(Annotation annotation) {
         logger.fine(startBanner("addWaypoint"));
 
-        if (this.mode != Mode.CREATE) {
+        if (this.mode == Mode.CREATE) {
             Waypoint waypoint = new Waypoint(annotation, currentLocation);
             int totalWaypoints = this.tour.waypoints.size();
+            this.output.clear();
+            logger.finer(finerBanner("Entering"));
 
             if (this.tour.legs.size() == totalWaypoints) {
                 Status addLegStatus = addLeg(null);
                 if (addLegStatus != Status.OK) {
+                    logger.warning(errorBanner("EMPTY_LEG_NOT_ADDED"));
                     return addLegStatus;
                 }
+                this.output.clear();
+                logger.finest(finestBanner("emptyLegAdded"));
             }
 
             if (totalWaypoints == 0) {
                 this.tour.waypoints.add(waypoint);
-
+                this.output.add(new Chunk.CreateHeader(
+                    this.tour.title,
+                    this.tour.legs.size(),
+                    this.tour.waypoints.size()
+                ));
+                logger.finer(finerBanner("initialWaypointAdded"));
                 return Status.OK;
             } else {
                 Waypoint prevWaypoint = this.tour.waypoints.get(totalWaypoints-1);
@@ -91,14 +127,23 @@ public class ControllerImp implements Controller {
                     (currentLocation.northing - prevWaypoint.location.northing)
                 );
                 if (waypointDisplacement.distance() < this.waypointSeparation) {
-                    return new Status.Error("The distance between two waypoints should be: " + this.waypointSeparation);
+                    logger.warning(errorBanner("WAYPOINT_TOO_CLOSE_TO_PREV"));
+                    return new Status.Error("The distance between two adjacent waypoints should be: " + this.waypointSeparation);
                 } else {
                     this.tour.waypoints.add(waypoint);
                 }
             }
 
+            this.output.add(new Chunk.CreateHeader(
+                this.tour.title,
+                this.tour.legs.size(),
+                this.tour.waypoints.size()
+            ));
+
+            logger.finer(finerBanner("waypointAdded"));
             return Status.OK;
         } else {
+            logger.warning(errorBanner("NOT_IN_CREATE_MODE"));
             return new Status.Error("Invalid operation. The app is not in CREATE Mode.");
         }
     }
@@ -107,7 +152,11 @@ public class ControllerImp implements Controller {
     public Status addLeg(Annotation annotation) {
         logger.fine(startBanner("addLeg"));
 
-        if (this.mode != Mode.CREATE) {
+        if (this.mode == Mode.CREATE) {
+            this.output.clear();
+
+            logger.finer(finerBanner("Entering"));
+
             if (annotation == null) {
                 annotation = Annotation.DEFAULT;
             }
@@ -116,11 +165,20 @@ public class ControllerImp implements Controller {
             if (this.tour.legs.size() == this.tour.waypoints.size()) {
                 this.tour.legs.add(leg);
             } else {
+                logger.warning(errorBanner("WAYPOINT_MISSING"));
                 return new Status.Error("Cannot add a leg right after another leg.");
             }
 
+            this.output.add(new Chunk.CreateHeader(
+                this.tour.title,
+                this.tour.legs.size(),
+                this.tour.waypoints.size()
+            ));
+
+            logger.finer(finerBanner("legAdded"));
             return Status.OK;
         } else {
+            logger.warning(errorBanner("NOT_IN_CREATE_MODE"));
             return new Status.Error("Invalid operation. The app is not in CREATE Mode.");
         }
     }
@@ -128,7 +186,26 @@ public class ControllerImp implements Controller {
     @Override
     public Status endNewTour() {
         logger.fine(startBanner("endNewTour"));
-        return new Status.Error("unimplemented");
+
+        if (this.mode == Mode.CREATE) {
+            if (this.tour.waypoints.size() > 0) {
+                if (this.tour.legs.size() == this.tour.waypoints.size()) {
+                    this.tour = null;
+                    this.mode = Mode.BROWSE_OVERVIEW;
+                    logger.finer(finerBanner("tourFinished"));
+                    return Status.OK;
+                } else {
+                    logger.warning(errorBanner("NO_FINAL_WAYPOINT"));
+                    return new Status.Error("Cannot finish creating a tour without a final waypoint.");
+                }
+            } else {
+                logger.warning(errorBanner("NO_WAYPOINTS"));
+                return new Status.Error("A tour should have at least one waypoint.");
+            }
+        } else {
+            logger.warning(errorBanner("NOT_IN_CREATE_MODE"));
+            return new Status.Error("Invalid operation. The app is not in CREATE Mode.");
+        }
     }
 
     //--------------------------
@@ -179,7 +256,7 @@ public class ControllerImp implements Controller {
 
     @Override
     public List<Chunk> getOutput() {
-        return new ArrayList<Chunk>();
+        return this.output;
     }
 
 
