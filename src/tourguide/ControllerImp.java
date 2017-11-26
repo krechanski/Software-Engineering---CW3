@@ -201,8 +201,13 @@ public class ControllerImp implements Controller {
                     logger.finer(finerBanner("newTourAdded"));
 
                     this.tour = null;
-                    this.mode = Mode.BROWSE_OVERVIEW;
                     logger.finer(finerBanner("newTourFinished"));
+
+                    Status browseStatus = showToursOverview();
+                    if (browseStatus != Status.OK) {
+                        logger.warning(errorBanner("SOMETHING_WENT_WRONG"));
+                    }
+
                     return Status.OK;
                 } else {
                     logger.warning(errorBanner("NO_FINAL_WAYPOINT"));
@@ -248,14 +253,17 @@ public class ControllerImp implements Controller {
 
     @Override
     public Status showToursOverview() {
-        logger.fine("showToursOverview");
-            this.mode = Mode.BROWSE_OVERVIEW;
-            Chunk.BrowseOverview overview = new Chunk.BrowseOverview();
-            for (Tour tour: this.library.tours) {
-               overview.addIdAndTitle(tour.id, tour.title);
-            }
+        logger.fine(startBanner("browseTourOverview"));
+        this.output.clear();
 
-            this.output.add(overview);
+        this.mode = Mode.BROWSE_OVERVIEW;
+        Chunk.BrowseOverview overview = new Chunk.BrowseOverview();
+
+        for (Tour tour: this.library.tours) {
+           overview.addIdAndTitle(tour.id, tour.title);
+        }
+
+        this.output.add(overview);
 
         return Status.OK;
     }
