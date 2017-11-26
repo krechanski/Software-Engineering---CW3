@@ -313,6 +313,24 @@ public class CreateTest {
     }
 
     @Test
+    public void testExistingId() {
+        logger.info(makeBanner("testExistingId"));
+
+        createOnePointTour();
+
+        checkStatus( controller.startNewTour(
+                "T1",
+                "Spooky Greyfriars",
+                ann("Failure test.\n"))
+            );
+
+        checkStatus( controller.addWaypoint(ann("Greyfriars Bobby")) );
+
+        checkStatusNotOK( controller.endNewTour() );
+
+    }
+
+    @Test
     public void testCreateOnePointTour() {
         logger.info(makeBanner("testCreateOnePointTour"));
         createOnePointTour();
@@ -341,7 +359,7 @@ public class CreateTest {
         logger.info(makeBanner("testCreateTwoTours"));
         createTwoTours();
     }
-    
+
     @Test
     public void testCreateMultipleInvalidWaypoints() {
         logger.info(makeBanner("testCreateMultipleInvalidWaypoints"));
