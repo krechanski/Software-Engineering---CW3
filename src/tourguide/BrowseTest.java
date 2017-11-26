@@ -215,11 +215,11 @@ public class BrowseTest {
         addTwoPointTour();
     }
 
+
     @Test
     public void listTours() {
         logger.info(makeBanner("listTours"));
 
     }
 }
-
 

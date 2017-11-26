@@ -193,7 +193,11 @@ public class ControllerImp implements Controller {
         if (this.mode == Mode.CREATE) {
             if (this.tour.waypoints.size() > 0) {
                 if (this.tour.legs.size() == this.tour.waypoints.size()) {
-                    this.library.addTour(this.tour);
+                    boolean added = this.library.addTour(this.tour);
+                    if (!added) {
+                        logger.warning(errorBanner("newTourNotAdded"));
+                        return new Status.Error("A tour with id: '" + this.tour.id + "' already exists.");
+                    }
                     logger.finer(finerBanner("newTourAdded"));
 
                     this.tour = null;
@@ -276,7 +280,7 @@ public class ControllerImp implements Controller {
             }
 
             if (this.tour == null) {
-                logger.warning(errorBanner("TOUR_NOT_FOUND" + this.library.tours.size()));
+                logger.warning(errorBanner("TOUR_NOT_FOUND"));
                 return new Status.Error("A Tour with id: '" + id + "' has not been found.");
             }
 
@@ -300,30 +304,57 @@ public class ControllerImp implements Controller {
 
             logger.finer(finerBanner("followTourInitiated"));
         } else if (this.mode == Mode.FOLLOW) {
+            logger.finer(finerBanner("Entering"));
+
+            boolean onWaypoint = false;
+            int whichWaypoint = 0;
+
+            Displacement userNearCurrentWaypoint = new Displacement(
+                (this.tour.waypoints.get(this.stage).location.easting - currentLocation.easting),
+                (this.tour.waypoints.get(this.stage).location.northing - currentLocation.northing)
+            );
+            if (userNearCurrentWaypoint.distance() <= this.waypointRadius) {
+                onWaypoint = true;
+                whichWaypoint = this.stage;
+                this.stage++;
+                logger.finer(finerBanner("nextWayPointReached"));
+            } else {
+                if (this.stage != 0) {
+                    Displacement userNearPrevWaypoint = new Displacement(
+                    (this.tour.waypoints.get(this.stage-1).location.easting - currentLocation.easting),
+                    (this.tour.waypoints.get(this.stage-1).location.northing - currentLocation.northing)
+                    );
+                    if (userNearCurrentWaypoint.distance() <= this.waypointRadius) {
+                        onWaypoint = true;
+                        whichWaypoint = this.stage-1;
+                        logger.finer(finerBanner("prevWayPointReached"));
+                    }
+                }
+            }
+
             this.output.add(new Chunk.FollowHeader(
                 this.tour.title,
                 this.stage,
                 this.tour.waypoints.size()
             ));
-            if (this.stage != 0) {
+            if (this.stage != 0 && onWaypoint) {
                 this.output.add(new Chunk.FollowWaypoint(
-                    this.tour.waypoints.get(this.stage-1).annotation
+                    this.tour.waypoints.get(whichWaypoint).annotation
                 ));
             }
             if (this.stage != this.tour.waypoints.size()) {
                 this.output.add(new Chunk.FollowLeg(
                     this.tour.legs.get(this.stage).annotation
                 ));
-                Displacement disp = new Displacement(
+                Displacement userToNextWaypoint = new Displacement(
                     (this.tour.waypoints.get(this.stage).location.easting - currentLocation.easting),
                     (this.tour.waypoints.get(this.stage).location.northing - currentLocation.northing)
                 );
                 this.output.add(new Chunk.FollowBearing(
-                    disp.bearing(),
-                    disp.distance()
+                    userToNextWaypoint.bearing(),
+                    userToNextWaypoint.distance()
                 ));
             }
-                this.stage++;
         } else {
             logger.warning(errorBanner("NOT_IN_BROWSE_MODE"));
             return new Status.Error("Invalid operation. The app is not in BROWSE Mode.");
@@ -336,7 +367,22 @@ public class ControllerImp implements Controller {
 
     @Override
     public Status endSelectedTour() {
-        return new Status.Error("unimplemented");
+        if (this.mode == Mode.FOLLOW) {
+            this.output.clear();
+            this.tour = null;
+
+            logger.finer(finerBanner("endFollowTour"));
+
+            Status browseStatus = showToursOverview();
+            if (browseStatus != Status.OK) {
+                logger.warning(errorBanner("SOMETHING_WENT_WRONG"));
+            }
+        } else {
+            logger.warning(errorBanner("NOT_IN_FOLLOW_MODE"));
+            return new Status.Error("Invalid operation. The app is not in FOLLOW Mode.");
+        }
+
+        return Status.OK;
     }
 
     //--------------------------
