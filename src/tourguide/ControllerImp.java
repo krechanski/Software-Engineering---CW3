@@ -4,6 +4,7 @@
 package tourguide;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -305,7 +306,6 @@ public class ControllerImp implements Controller {
             this.output.add(new Chunk.FollowLeg(
                 this.tour.legs.get(0).annotation
             ));
-
             Displacement disp = new Displacement(
                 (this.tour.waypoints.get(0).location.easting - currentLocation.easting),
                 (this.tour.waypoints.get(0).location.northing - currentLocation.northing)

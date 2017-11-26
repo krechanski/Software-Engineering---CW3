@@ -1,8 +1,7 @@
 
 package tourguide;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class Library {
@@ -34,8 +33,21 @@ public class Library {
         }
         
         this.tours.add(tour);
+        Collections.sort(tours, new TourComparator());
         logger.finest("newTourAdded");
         return true;
     }
+
+//    @Override
+//    public int compare(Tour o1, Tour o2) {
+//
+//    }
+
+
+//    Collections.sort(vehiclearray, new Comparator<Vehicle>() {
+//        public int compare(Vehicle v1, Vehicle v2) {
+//            return v1.getEmail().compareTo(v2.getEmail());
+//        }
+//    });
 
 }

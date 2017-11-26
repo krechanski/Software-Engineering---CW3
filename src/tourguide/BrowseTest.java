@@ -99,12 +99,6 @@ public class BrowseTest {
 
     }
 
-    @Test
-    public void testCreateOnePointTour() {
-        logger.info(makeBanner("testCreateOnePointTour"));
-        createOnePointTour();
-    }
-
     private void addTwoPointTour() {
         checkStatus(
                 controller.startNewTour("T2", "Old Town", ann("From Edinburgh Castle to Holyrood\n"))
@@ -161,6 +155,60 @@ public class BrowseTest {
 
     }
 
+    private void addOnePointTourSecond() {
+
+        checkStatus(controller.startNewTour(
+                "T5",
+                "Informatics at UoE",
+                ann("The Informatics Forum and Appleton Tower\n"))
+        );
+
+        checkOutput(1, 0, new Chunk.CreateHeader("Informatics at UoE", 0, 0));
+
+        controller.setLocation(300, -500);
+
+        checkStatus(controller.addLeg(ann("Start at NE corner of George Square\n")));
+
+        checkOutput(1, 0, new Chunk.CreateHeader("Informatics at UoE", 1, 0));
+
+        checkStatus(controller.addWaypoint(ann("Informatics Forum")));
+
+        checkOutput(1, 0, new Chunk.CreateHeader("Informatics at UoE", 1, 1));
+
+        checkStatus(controller.endNewTour());
+
+    }
+
+
+    private void createThreePointTourWithoutLegs() {
+
+        checkStatus( controller.startNewTour(
+                "T3",
+                "Quick Royal Mile Walk",
+                ann("A stroll down the famous Royal Mile\n"))
+        );
+        checkOutput(1, 0, new Chunk.CreateHeader("Quick Royal Mile Walk", 0,  0));
+
+        controller.setLocation(700, -900);
+
+        checkStatus( controller.addWaypoint(ann("Edinburgh Castle")) );
+        checkOutput(1, 0, new Chunk.CreateHeader("Quick Royal Mile Walk", 1,  1));
+
+        controller.setLocation(400, -600);
+
+        checkStatus( controller.addWaypoint(ann("Camera Obscura")) );
+        checkOutput(1, 0, new Chunk.CreateHeader("Quick Royal Mile Walk", 2,  2));
+
+        controller.setLocation(100, -300);
+
+        checkStatus( controller.addWaypoint(ann("Whisky Museum")) );
+        checkOutput(1, 0, new Chunk.CreateHeader("Quick Royal Mile Walk", 3,  3));
+
+        checkStatus( controller.endNewTour() );
+
+    }
+
+
     @Test
     public void browseOneTour() {
         logger.info(makeBanner("browseOneTour"));
@@ -200,26 +248,30 @@ public class BrowseTest {
         checkOutput(1, 0, new Chunk.BrowseOverview());
     }
 
-    @Test
-    public void testAddTwoPointTour () {
-        logger.info(makeBanner("testAddTwoPointTour"));
-        addTwoPointTour();
-
-    }
-
-    @Test
-    public void testAddOfTwoTours () {
-        logger.info(makeBanner("testAddOfTwoTour"));
-
-        addOnePointTour();
-        addTwoPointTour();
-    }
 
 
     @Test
     public void listTours() {
         logger.info(makeBanner("listTours"));
 
+    }
+
+
+    @Test
+    public void sortedTours() {
+        logger.info(makeBanner("sortedTours"));
+
+        addOnePointTourSecond();
+        addTwoPointTour();
+        addOnePointTour();
+        createThreePointTourWithoutLegs();
+
+        Chunk.BrowseOverview overview = new Chunk.BrowseOverview();
+        overview.addIdAndTitle("T1", "Informatics at UoE");
+        overview.addIdAndTitle("T2", "Old Town");
+        overview.addIdAndTitle("T3", "Quick Royal Mile Walk");
+        overview.addIdAndTitle("T5", "Informatics at UoE");
+        checkOutput(1, 0, overview);
     }
 }
 
