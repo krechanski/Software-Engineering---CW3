@@ -169,7 +169,9 @@ public class FollowTest {
 
     private void followFourPointTour() {
 
+        createOnePointTour();
         createFourPointTour();
+        createThreePointTourWithoutLegs();
 
         checkStatus( controller.followTour("T2") );
 
@@ -221,7 +223,8 @@ public class FollowTest {
 
         Chunk.BrowseOverview overview = new Chunk.BrowseOverview();
         overview.addIdAndTitle("T1", "Informatics at UoE");
-        overview.addIdAndTitle("T2", "Old Town");
+        overview.addIdAndTitle("T2", "Royal Mile Walk");
+        overview.addIdAndTitle("T3", "Quick Royal Mile Walk");
         checkOutput(1, 0, overview);
 
     }

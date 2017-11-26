@@ -56,9 +56,14 @@ public class ControllerImp implements Controller {
     public ControllerImp(double waypointRadius, double waypointSeparation) {
         this.waypointRadius = waypointRadius;
         this.waypointSeparation = waypointSeparation;
-        this.mode = Mode.BROWSE_OVERVIEW;
+        this.mode = Mode.BROWSE;
         this.library = new Library();
         this.output = new ArrayList<Chunk>();
+
+        Status browseStatus = showToursOverview();
+        if (browseStatus != Status.OK) {
+            logger.warning(errorBanner("SOMETHING_WENT_WRONG"));
+        }
     }
 
     //--------------------------
@@ -73,7 +78,7 @@ public class ControllerImp implements Controller {
         logger.fine(startBanner("startNewTour"));
 
         // Set the mode
-        if (this.mode == Mode.BROWSE_OVERVIEW) {
+        if (this.mode == Mode.BROWSE) {
             this.mode = Mode.CREATE;
 
             // Initialize a tour object
@@ -230,9 +235,9 @@ public class ControllerImp implements Controller {
     @Override
     public Status showTourDetails(String tourID) {
         logger.fine("showTourDetails");
-        if (this.mode == Mode.BROWSE_OVERVIEW) {
-            this.mode = Mode.BROWSE_DETAILS;
+        this.output.clear();
 
+        if (this.mode == Mode.BROWSE) {
             for (Tour tour : this.library.tours) {
                 if (tourID.equalsIgnoreCase(tour.id)) {
                     this.tour = tour;
@@ -247,7 +252,7 @@ public class ControllerImp implements Controller {
 
             return Status.OK;
         } else {
-            return new Status.Error("Invalid. The app is not in BROWSE_OVERVIEW mode");
+            return new Status.Error("Invalid. The app is not in BROWSE mode");
         }
     }
 
@@ -256,7 +261,7 @@ public class ControllerImp implements Controller {
         logger.fine(startBanner("browseTourOverview"));
         this.output.clear();
 
-        this.mode = Mode.BROWSE_OVERVIEW;
+        this.mode = Mode.BROWSE;
         Chunk.BrowseOverview overview = new Chunk.BrowseOverview();
 
         for (Tour tour: this.library.tours) {
@@ -277,7 +282,7 @@ public class ControllerImp implements Controller {
         logger.fine(startBanner("followTour"));
         this.output.clear();
 
-        if (this.mode == Mode.BROWSE_DETAILS || this.mode == Mode.BROWSE_OVERVIEW) {
+        if (this.mode == Mode.BROWSE) {
             this.mode = Mode.FOLLOW;
             this.stage = 0;
 

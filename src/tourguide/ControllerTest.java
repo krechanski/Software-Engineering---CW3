@@ -109,12 +109,12 @@ public class ControllerTest {
 
     }
 
-    // @Test
-    // public void testAddOnePointTour() {
-    //     logger.info(makeBanner("testAddOnePointTour"));
-    //
-    //     addOnePointTour();
-    // }
+    @Test
+    public void testAddOnePointTour() {
+        logger.info(makeBanner("testAddOnePointTour"));
+
+        addOnePointTour();
+    }
 
 
     private void addTwoPointTour() {
@@ -152,27 +152,27 @@ public class ControllerTest {
 
 
 
-    // @Test
-    // public void browsingTwoTours() {
-    //     logger.info(makeBanner("browsingTwoTours"));
-    //
-    //     addOnePointTour();
-    //     addTwoPointTour();
-    //
-    //     Chunk.BrowseOverview overview = new Chunk.BrowseOverview();
-    //     overview.addIdAndTitle("T1", "Informatics at UoE");
-    //     overview.addIdAndTitle("T2", "Old Town");
-    //     checkOutput(1, 0, overview);
-    //
-    //     checkStatusNotOK( controller.showTourDetails("T3") );
-    //     checkStatus( controller.showTourDetails("T1") );
-    //
-    //     checkOutput(1, 0, new Chunk.BrowseDetails(
-    //             "T1",
-    //             "Informatics at UoE",
-    //             ann("The Informatics Forum and Appleton Tower\n")
-    //             ));
-    // }
+    @Test
+    public void browsingTwoTours() {
+        logger.info(makeBanner("browsingTwoTours"));
+
+        addOnePointTour();
+        addTwoPointTour();
+
+        Chunk.BrowseOverview overview = new Chunk.BrowseOverview();
+        overview.addIdAndTitle("T1", "Informatics at UoE");
+        overview.addIdAndTitle("T2", "Old Town");
+        checkOutput(1, 0, overview);
+
+        checkStatusNotOK( controller.showTourDetails("T3") );
+        checkStatus( controller.showTourDetails("T1") );
+
+        checkOutput(1, 0, new Chunk.BrowseDetails(
+                "T1",
+                "Informatics at UoE",
+                ann("The Informatics Forum and Appleton Tower\n")
+                ));
+    }
 
     @Test
     public void followOldTownTour() {

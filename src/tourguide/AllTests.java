@@ -18,7 +18,7 @@ import org.junit.runners.Suite.SuiteClasses;
  *
  */
 @RunWith(Suite.class)
-@SuiteClasses({ DisplacementTest.class, ControllerTest.class, TestTest.class, BrowseTest.class, FollowTest.class})
+@SuiteClasses({ DisplacementTest.class, ControllerTest.class, CreateTest.class, BrowseTest.class, FollowTest.class})
 public class AllTests {
 
     public static void main(String[] args) {
