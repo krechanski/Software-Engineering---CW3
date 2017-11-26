@@ -77,12 +77,11 @@ public class ControllerTest {
         controller = new ControllerImp(WAYPOINT_RADIUS, WAYPOINT_SEPARATION);
     }
 
-    // @Test
-    // public void noTours() {
-    //     logger.info(makeBanner("noTours"));
-    //
-    //     checkOutput(1, 0, new Chunk.BrowseOverview() );
-    //  }
+     @Test
+     public void noTours() {
+         logger.info(makeBanner("noTours"));
+         checkOutput(1, 0, new Chunk.BrowseOverview());
+      }
 
     // Locations roughly based on St Giles Cathedral reference.
 

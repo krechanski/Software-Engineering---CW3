@@ -46,6 +46,7 @@ public class ControllerImp implements Controller {
     public Location currentLocation;
     public Library library;
 
+
     private Tour tour;
 
     private int stage;
@@ -219,27 +220,40 @@ public class ControllerImp implements Controller {
 
     @Override
     public Status showTourDetails(String tourID) {
-        logger.fine("tourDetails");
+        logger.fine("showTourDetails");
         if (this.mode == Mode.BROWSE_OVERVIEW) {
             this.mode = Mode.BROWSE_DETAILS;
 
-            for (Tour id : this.library.tours) {
-                if (tourID.equalsIgnoreCase(this.tour.id)) {
-                    logger.finer(finerBanner(tourID));
-                    logger.finer(finerBanner(this.tour.title));
+            for (Tour tour : this.library.tours) {
+                if (tourID.equalsIgnoreCase(tour.id)) {
+                    this.tour = tour;
+                    this.output.add(new Chunk.BrowseDetails(tour.id,tour.title, tour.annotation));
                 }
+            }
+
+            if (this.tour == null) {
+                logger.warning(errorBanner("TOUR_NOT_FOUND"));
+                return new Status.Error("A Tour with id: '" + tourID + "' has not been found.");
             }
 
             return Status.OK;
         } else {
-            return new Status.Error("Invalid. The app is not in BROWSE_DETAILS mode");
+            return new Status.Error("Invalid. The app is not in BROWSE_OVERVIEW mode");
         }
     }
 
     @Override
     public Status showToursOverview() {
-        return null;
+        logger.fine("showToursOverview");
+            this.mode = Mode.BROWSE_OVERVIEW;
+            Chunk.BrowseOverview overview = new Chunk.BrowseOverview();
+            for (Tour tour: this.library.tours) {
+               overview.addIdAndTitle(tour.id, tour.title);
+            }
 
+            this.output.add(overview);
+
+        return Status.OK;
     }
 
     //--------------------------

@@ -116,7 +116,7 @@ public class Chunk {
         public FollowHeader(String title, int currentStage, int numberWaypoints) {
             this.title = title;
             this.currentStage = currentStage;
-	          this.numberWaypoints = numberWaypoints;
+            this.numberWaypoints = numberWaypoints;
         }
         public String toString() {
             return String.format("%1$s  %2$d/%3$d%n",title, currentStage, numberWaypoints);
