@@ -9,7 +9,13 @@ import java.util.logging.Logger;
 
 public class Displacement {
     private static Logger logger = Logger.getLogger("tourguide");
-       
+    private static final String LS = System.lineSeparator();
+
+    private String finerBanner(String messageName) {
+        return LS
+                + "STATUS: " + " ------- " + messageName + " ------- ";
+    }
+
     public double east;
     public double north;
 
@@ -21,7 +27,7 @@ public class Displacement {
      * */
 
     public Displacement(double e, double n) {
-        logger.finer("East: " + e + "  North: "  + n);
+        logger.finer(finerBanner("East: " + e + "  North: "  + n));
         
         east = e;
         north = n;
@@ -32,9 +38,9 @@ public class Displacement {
      *
      * @return calculated distance using the Math.sqrt() function.
      */
-     
+
     public double distance() {
-        logger.finer("Entering");
+        logger.finer(finerBanner("Entering"));
         
         return Math.sqrt(east * east + north * north);
     }
@@ -48,7 +54,7 @@ public class Displacement {
      */
 
     public double bearing() {
-        logger.finer("Entering");
+        logger.finer(finerBanner("Entering"));
         
         double inRadians = Math.atan2(east, north);
         

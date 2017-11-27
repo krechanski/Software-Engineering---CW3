@@ -38,7 +38,6 @@ public class ControllerTest {
         Assert.assertEquals(expected, actual);
     }
 
-
     /*
      * Logging functionality
      */
@@ -69,8 +68,6 @@ public class ControllerTest {
           + "TESTCASE: " + testCaseName + LS
           + "#############################################################";
     }
-
-
 
     @Before
     public void setup() {
@@ -116,7 +113,6 @@ public class ControllerTest {
         addOnePointTour();
     }
 
-
     private void addTwoPointTour() {
          checkStatus(
                 controller.startNewTour("T2", "Old Town", ann("From Edinburgh Castle to Holyrood\n"))
@@ -148,9 +144,6 @@ public class ControllerTest {
         checkStatus( controller.endNewTour() );
 
     }
-
-
-
 
     @Test
     public void browsingTwoTours() {

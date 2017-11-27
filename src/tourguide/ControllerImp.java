@@ -83,11 +83,12 @@ public class ControllerImp implements Controller {
     // Create tour mode
     //--------------------------
 
-    /*
+    /**
      * The creation of a tour is initiated by this method.
      * It sets to mode to FOLLOW and initiates a tour with the given parameters
      * ready to be populated with waypoints and legs.
-     * The method returns the appropriate status and outputs the initiated new tour.
+     * @return the appropriate status and 
+     *         output the initiated new tour.
      */
     @Override
     public Status startNewTour(String id, String title, Annotation annotation) {
@@ -115,12 +116,13 @@ public class ControllerImp implements Controller {
         }
     }
 
-    /*
+    /**
      * This method adds a waypoint to a new tour.
      * It checks wether the app is in FOLLOW mode and 
      * assesses whether a leg has been added before it and
      * if the current waypoint is separeted enough from the previous one.
-     * The returned value is a status and the output is the updated new tour.
+     * @return the status and 
+     *         output the updated new tour.
      */
     @Override
     public Status addWaypoint(Annotation annotation) {
@@ -183,10 +185,11 @@ public class ControllerImp implements Controller {
         }
     }
 
-    /*
+    /**
      * This method adds a leg after a waypoint.
      * It can be executed only in FOLLOW mode.
-     * It returns the status and outputs the updated tour.
+     * @return the status and 
+     *         output the updated tour.
      */
     @Override
     public Status addLeg(Annotation annotation) {
@@ -226,12 +229,12 @@ public class ControllerImp implements Controller {
         }
     }
 
-    /*
+    /**
      * A new tour is finished with this method.
      * The method assesses whether the tour has a final waypoint or
-     * any at all.
-     * It returns the status and if successful adds the tour to the library and
-     * sets the app to be in BrowseOverview state.
+     * any at all and adds the tour to the library.
+     * @return the status and
+     *         set the app to be in BrowseOverview state.
      */
     @Override
     public Status endNewTour() {
@@ -283,9 +286,10 @@ public class ControllerImp implements Controller {
     // Browse tours mode
     //--------------------------
 
-    /*
+    /**
      * A tour's details are given by this method.
-     * It outputs the id, title and annotation of a selected tour.
+     * @return the status and
+     *         output the id, title and annotation of a selected tour.
      */
     @Override
     public Status showTourDetails(String tourID) {
@@ -314,9 +318,10 @@ public class ControllerImp implements Controller {
         }
     }
 
-    /*
+    /**
      * This method defines the initial state that the app is in.
-     * It outputs all created tours in the library.
+     * @return the status and 
+     *         output all created tours in the library.
      */
     @Override
     public Status showToursOverview() {
@@ -339,10 +344,10 @@ public class ControllerImp implements Controller {
     // Follow tour mode
     //--------------------------
 
-    /*
+    /**
      * This is the main method to handle the follow tour sequence.
-     * It returns output based on the user's location and the stage
-     * that the execution of the tour is in.
+     * @return the status and the output based on the user's location and the stage
+     *         that the execution of the tour is in.
      */
     @Override
     public Status followTour(String id) {
@@ -464,9 +469,10 @@ public class ControllerImp implements Controller {
 
     }
 
-    /*
+    /**
      * This method terminates the execution of a follow tour sequence.
-     * It returns the app to the BrowseOverview state.
+     * @return the status and 
+     *         sets the app to the BrowseOverview state.
      */
     @Override
     public Status endSelectedTour() {
@@ -492,7 +498,7 @@ public class ControllerImp implements Controller {
     // Multi-mode methods
     //--------------------------
 
-    /*
+    /**
      * The user's current location is updated by this method.
      */
     @Override
@@ -511,7 +517,7 @@ public class ControllerImp implements Controller {
 
     }
 
-    /*
+    /**
      * This method returns the output of the app and
      * can be called at any time.
      */

@@ -18,6 +18,10 @@ public class Library {
         return LS
                 + "ERROR: " + " !!!!! " + messageName + " !!!!! ";
     }
+    private String finerBanner(String messageName) {
+        return LS
+                + "STATUS: " + " ------- " + messageName + " ------- ";
+    }
 
     public Library() {
 
@@ -45,7 +49,7 @@ public class Library {
         
         this.tours.add(tour);
         Collections.sort(tours, new TourComparator());
-        logger.finest("newTourAdded");
+        logger.finer(finerBanner("newTourAdded"));
         return true;
     }
 
