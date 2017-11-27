@@ -1,6 +1,11 @@
 
 package tourguide;
 
+/** The class Location is used to hold the location of each waypoint
+ *  and the user's current location.
+ *  @author Hristiyan Yaprakov and Kiril Rechanski
+ **/
+
 import java.util.logging.Logger;
 
 public class Location {
@@ -15,7 +20,4 @@ public class Location {
         this.northing = northing;
     }
 
-//    public Displacement deltaFrom(Location) {
-//        return null;
-//    }
 }

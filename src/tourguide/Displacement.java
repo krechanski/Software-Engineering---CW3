@@ -19,6 +19,7 @@ public class Displacement {
      * @param e Stands for 'east'
      * @param n Stands for 'north
      * */
+
     public Displacement(double e, double n) {
         logger.finer("East: " + e + "  North: "  + n);
         
@@ -31,6 +32,7 @@ public class Displacement {
      *
      * @return calculated distance using the Math.sqrt() function.
      */
+     
     public double distance() {
         logger.finer("Entering");
         

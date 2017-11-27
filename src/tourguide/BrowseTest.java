@@ -73,8 +73,6 @@ public class BrowseTest {
         controller = new ControllerImp(WAYPOINT_RADIUS, WAYPOINT_SEPARATION);
     }
 
-    // Locations roughly based on St Giles Cathedral reference.
-
     private void createOnePointTour() {
 
         checkStatus(controller.startNewTour(
@@ -108,7 +106,6 @@ public class BrowseTest {
 
         controller.setLocation(-500, 0);
 
-        // Leg before this waypoint with default annotation added at same time
         checkStatus(controller.addWaypoint(ann("Edinburgh Castle\n")));
 
         checkOutput(1, 0, new Chunk.CreateHeader("Old Town", 1, 1));
@@ -208,7 +205,6 @@ public class BrowseTest {
 
     }
 
-
     @Test
     public void browseOneTour() {
         logger.info(makeBanner("browseOneTour"));
@@ -248,14 +244,11 @@ public class BrowseTest {
         checkOutput(1, 0, new Chunk.BrowseOverview());
     }
 
-
-
     @Test
     public void listTours() {
         logger.info(makeBanner("listTours"));
 
     }
-
 
     @Test
     public void sortedTours() {

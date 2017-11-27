@@ -194,6 +194,7 @@ public class CreateTest {
                 "Quick Royal Mile Walk",
                 ann("A stroll down the famous Royal Mile\n"))
             );
+
         checkOutput(1, 0, new Chunk.CreateHeader("Quick Royal Mile Walk", 0,  0));
 
         controller.setLocation(700, -900);
@@ -222,6 +223,7 @@ public class CreateTest {
                 "Spooky Greyfriars",
                 ann("A haunted exploration of the most famous graveyard.\n"))
             );
+
         checkOutput(1, 0, new Chunk.CreateHeader("Spooky Greyfriars", 0,  0));
 
         controller.setLocation(500, 500);
@@ -257,6 +259,7 @@ public class CreateTest {
                 "Spooky Greyfriars",
                 ann("A haunted exploration of the most famous graveyard.\n"))
             );
+
         checkOutput(1, 0, new Chunk.CreateHeader("Spooky Greyfriars", 0,  0));
 
         controller.setLocation(500, 500);
@@ -292,6 +295,7 @@ public class CreateTest {
                 "Spooky Greyfriars",
                 ann("A haunted exploration of the most famous graveyard.\n"))
             );
+
         checkOutput(1, 0, new Chunk.CreateHeader("Spooky Greyfriars", 0,  0));
 
         checkStatusNotOK( controller.endNewTour() );
@@ -377,6 +381,5 @@ public class CreateTest {
         logger.info(makeBanner("testInvalidFinishes"));
         invalidFinishes();
     }
-
 
 }

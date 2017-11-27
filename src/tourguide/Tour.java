@@ -1,6 +1,11 @@
 
 package tourguide;
 
+/** The class Tour holds the information about a Tour.
+ *  It has lists holding the tours waypoints and legs.
+ *  @author Hristiyan Yaprakov and Kiril Rechanski
+ **/
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

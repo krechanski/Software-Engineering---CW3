@@ -1,6 +1,10 @@
 
 package tourguide;
 
+/** The class Library stores all tours created.
+ *  @author Hristiyan Yaprakov and Kiril Rechanski
+ **/
+
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -20,6 +24,13 @@ public class Library {
         this.tours = new ArrayList<Tour>();
     }
 
+    /** This method adds a created tour to the list of tours
+     *  and sorts that list
+     *
+     * @return confirmation whether a tour has been 
+     *         successfuly added or not.
+     */
+
     public boolean addTour(Tour tour) {
         boolean contains = false;
         for (Tour t : this.tours) {
@@ -37,17 +48,5 @@ public class Library {
         logger.finest("newTourAdded");
         return true;
     }
-
-//    @Override
-//    public int compare(Tour o1, Tour o2) {
-//
-//    }
-
-
-//    Collections.sort(vehiclearray, new Comparator<Vehicle>() {
-//        public int compare(Vehicle v1, Vehicle v2) {
-//            return v1.getEmail().compareTo(v2.getEmail());
-//        }
-//    });
 
 }
