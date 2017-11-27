@@ -293,7 +293,7 @@ public class ControllerImp implements Controller {
      */
     @Override
     public Status showTourDetails(String tourID) {
-        logger.fine("showTourDetails");
+        logger.fine(startBanner("showTourDetails"));
         this.output.clear();
 
         if (this.mode == Mode.BROWSE) {
