@@ -8,5 +8,7 @@ It containts code, a UML class model, a UML sequence diagram, system description
 a tour guide app we named CountryXplore.
 
 Coursework 1 Mark: 88/100
+
 Coursework 2 Mark: 44/100
+
 Coursework 3 Mark: 78/100
